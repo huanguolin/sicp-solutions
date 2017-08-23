@@ -9,6 +9,10 @@
 ;; test (expt-r 2 11) => 2048
 
 ;; 题目要求的迭代计算版本
+;;
+;; 该版本要优于书中的示例 fast-expt,
+;; 因为该版本的空间复杂度是Θ(1),要优于
+;; 书中的Θ(logN)
 (define (expt-i b n)
   (define (iter a b n)
     (cond ((= 0 n) a)
