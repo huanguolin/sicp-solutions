@@ -36,12 +36,9 @@
 (define (find-prime start count)
   (if (= count 0)
       (display "finished!")
-      (if (odd? start)
-          (find-prime (+ start 2)
-                      (if (timed-prime-test start)
-                          (- count 1)
-                          count))
-          (find-prime (+ start 1)
+      (find-prime (+ start 1)
+                  (if (timed-prime-test start)
+                      (- count 1)
                       count))))
 
 ;; 题目要求的求值:
@@ -54,13 +51,14 @@
 ;; finished!
 ;;
 ;; 3个大于10,000的质数:
-;;(find-prime 10000 3)
+;; (find-prime 10000 3)
 ;; 10007 [ms: 0.0]
 ;; 10009 [ms: 0.0]
 ;; 10037 [ms: 0.0]
 ;; finished!
 ;;
 ;; 3个大于100,000的质数:
+;; (find-prime 100000 3)
 ;; 100003 [ms: 0.0]
 ;; 100019 [ms: 0.0]
 ;; 100043 [ms: 0.0]
