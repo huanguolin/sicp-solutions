@@ -12,6 +12,7 @@
 (define (sub-interval x y)
   (make-interval (- (lower-bound x) (upper-bound y))
                  (- (upper-bound x) (lower-bound y))))
+; test
 (define x (make-interval 2 9))
 (define y (make-interval 3 5))
 (sub-interval x y)
