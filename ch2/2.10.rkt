@@ -1,0 +1,25 @@
+#lang scheme
+; 预定义函数
+(define (make-interval a b) (cons a b))
+(define (lower-bound z)
+  (min (car z)
+       (cdr z)))
+(define (upper-bound z)
+  (max (car z)
+       (cdr z)))
+(define (mul-interval x y)
+  (let ((p1 (* (lower-bound x) (lower-bound y)))
+        (p2 (* (lower-bound x) (upper-bound y)))
+        (p3 (* (upper-bound x) (lower-bound y)))
+        (p4 (* (upper-bound x) (upper-bound y))))
+    (make-interval (min p1 p2 p3 p4)
+                   (max p1 p2 p3 p4))))
+; 修改除法运算
+(define (div-interval x y)
+  (let ((y-max (upper-bound y))
+        (y-min (lower-bound y)))
+    (if (< (* y-max y-min) 0)
+        (display "不能除以含0区间")
+        (mul-interval x  
+                      (make-interval (/ 1.0 y-max) 
+                                     (/ 1.0 y-min))))))
