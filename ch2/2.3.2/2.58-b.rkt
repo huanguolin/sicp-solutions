@@ -6,6 +6,38 @@
 (define (=number? exp num) (and (number? exp) (= exp num)))
 
 ;================ b =================
+; 我的思路是把这种表达式转化为 a 中的表达式,
+; 然后用 a 中的函数继续处理即可.
+; add new transfer procedure
+(define (transfer exp)
+  (define (high-op? op) (same-variable? op '*))
+  (if (or (not (pair? exp))
+          (< (length exp) 5))
+      exp
+      (let ((first-op (cadr exp))
+            (second-op (cadddr exp)))
+        (let ((first-high (high-op? first-op))
+              (second-high (high-op? second-op)))
+          (cond ((or first-high
+                     (not second-high))
+                 (transfer (cons (list (transfer (car exp))
+                                       (cadr exp)
+                                       (transfer (caddr exp)))
+                                 (cdddr exp))))
+                (else
+                 (transfer (list (transfer (car exp))
+                                 (cadr exp)
+                                 (transfer (cddr exp))))))))))
+;test
+(display "测试 transfer :")
+(newline)
+(transfer '(3 * 4 + 5)) ;((3 * 4) + 5)
+(transfer '(3 + 4 * 5)) ;(3 + (4 * 5))
+(transfer '(3 + 4 + 5)) ;(3 + (4 * 5))
+(transfer '(3 * 4 * 5)) ;((3 * 4) * 5))
+(transfer '(3 + 4 + 5 * 6)) ;((3 + 4) + (5 * 6))
+(newline)
+
 ; sum part
 (define (sum? x) (and (pair? x) (eq? (cadr x) '+)))
 (define (addend s) (car s))
@@ -26,7 +58,7 @@
         ((=number? m2 1) m1)
         ((and (number? m1) (number? m2)) (* m1 m2))
         (else (list m1 '* m2))))
-; 微分函数
+; 旧微分函数
 (define (deriv exp var)
   (cond ((number? exp) 0)
         ((variable? exp) (if (same-variable? exp var) 1 0))
@@ -40,8 +72,16 @@
                         (multiplicand exp))))
         (else
          (error "unknown expression type: DERIV" exp))))
+
+; 新微分函数
+(define (new-deriv exp var)
+  (deriv (transfer exp) var))
 ; test
-(deriv '(x + (3 * (x + (y + 2)))) 'x)
-(deriv '(x * (y + 2)) 'x)
+(display "测试 new-deriv :")
+(newline)
+(new-deriv '(x + 3 * (x + y + 2)) 'x)
+(new-deriv '(x * (y + 2)) 'x)
+
+
 
 
