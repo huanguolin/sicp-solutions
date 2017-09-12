@@ -1,3 +1,5 @@
+#lang scheme
+
 ; pre-defined
 (define (tree->list-1 tree)
   (if (null? tree)
@@ -45,5 +47,4 @@
 ; T(n) ~= O(n)
 ;
 ; 所以第一个需要的步骤要多一些。第二个增长慢！
-;
 ;
