@@ -1,5 +1,13 @@
 #lang scheme
 
+; export procedures
+(provide 
+  entry
+  left-branch
+  right-branch
+  make-tree
+  list->tree)
+
 ; pre-defined
 (define (entry tree) (car tree))
 (define (left-branch tree) (cadr tree))
