@@ -1,5 +1,7 @@
 #lang scheme
 
+(provide encode)
+
 (require "leaf.rkt"
          "tree.rkt"
          "2.67.rkt")
