@@ -1,16 +1,13 @@
 #lang scheme
 
+(provide generate-huffman-tree)
+
 (require "make-leaf-set.rkt"
          "tree.rkt"
-         "leaf.rkt"
-         "decode.rkt"
-         "encode.rkt")
+         "leaf.rkt")
 
-; pre-defined
 (define (generate-huffman-tree pairs)
   (successive-merge (make-leaf-set pairs)))
-
-; solution
 (define (successive-merge tree-set)
   (define (insert e l)
     (if (null? l) 
@@ -27,16 +24,3 @@
         (successive-merge (insert (make-code-tree first
                                                   (car rest))
                                   (cdr rest))))))
-; test 
-(define my-tree (generate-huffman-tree
-                     '((C 1)
-                       (D 1)
-                       (B 2)
-                       (A 4))))
-(display "except: (A D A B B C A)")
-(newline)
-(display "result: ")
-(decode (encode '(A D A B B C A)
-                my-tree)
-        my-tree) ; result: '(A D A B B C A)
-
