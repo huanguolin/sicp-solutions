@@ -13,9 +13,7 @@
 ; encode-symbol
 (define (encode-symbol char tree)
   (define (correct-branch? branch)
-    (if (leaf? branch)
-        (equal? char (symbol-leaf branch))
-        (list-has? char (symbols branch))))
+    (list-has? char (symbols branch))) ; symbols auto detect leaf or tree
   (let ((lb (left-branch tree))
         (rb (right-branch tree)))
     (cond ((correct-branch? lb)
