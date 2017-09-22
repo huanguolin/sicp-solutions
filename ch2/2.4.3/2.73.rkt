@@ -20,7 +20,7 @@
   (define (deriv-sums args var)
     (make-sum (deriv (addend args) var)
 	      (deriv (augend args) var)))
-  (put 'deriv 'sums deriv-sums)
+  (put 'deriv '+ deriv-sums)
   'done)
 ; 2) products
 (define (install-products-package)
@@ -31,5 +31,30 @@
   (define (deriv-products args var)
     (make-product (deriv (multiplier args) var)
 	          (deriv (multiplicand args) var)))
-  (put 'deriv 'products deriv-product)
+  (put 'deriv '* deriv-product)
   'done)
+ 
+
+;----------------
+; c.
+;----------------
+; add exponents
+(define (install-exponents-package)
+  ;; internal procedures
+  (define (base x) (cadr x))
+  (define (exponent x) (caddr x))
+  (define (make-exponentiation b e)
+   (cond ((=number? e 0) 1)
+    	 ((=number? e 1) b)
+	 (else (list '** b e))))
+  (define (deriv-exponents args var)
+   (make-expoentiation (deriv (base args) var)
+    		       (deriv (exponent args) var)))
+  (put 'deriv '^ deriv-exponents)
+  'done)
+
+;----------------
+; c.
+;----------------
+; 仅仅把 put 的前两个参数换一下位置，即可
+
