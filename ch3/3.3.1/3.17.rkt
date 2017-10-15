@@ -1,22 +1,32 @@
 #lang scheme
-
 ; set-cdr! required
 (require r5rs)
 
-; Ben's method:
 (define (count-pair x)
-  (if (not (pair? x))
-      0
-      (+ (count-pair (car x))
-         (count-pair (cdr x))
-         1)))
+  (define (in-list? a l)
+    (if (pair? l)
+        (or (eq? a (car l))
+            (in-list? a (cdr l)))
+        (eq? a l)))
+  (let ((record null))
+    (define (iter y)
+      (if (or (not (pair? y)) 
+              (in-list? y record))
+          0
+          (begin
+            (set! record (cons y record))
+            (+ (iter (car y))
+               (iter (cdr y))
+               1))))
+    (iter x)))
 
-; test case
-; output 3
+; ======== test =========
+
+; case 1
 ; [1]->[2]->[3]
 (count-pair (list 1 2 3)) ; 3
 
-; output 4
+; case 2
 ; [2]->[ ]->[1]
 ;       |____↑
 (define a (cons 1 null)) ; 1
@@ -24,14 +34,14 @@
 (define c (cons 2 b)) ; 1
 (count-pair c)
 
-; output 5
+; case 3
 ; [ ]->[1]->[2]
 ;  |____↑
 (define d (list 1 2)) ; 2
 (define e (cons d d)) ; 1
 (count-pair e)
 
-; output 7
+; case 4
 ;       |――――↓
 ; [ ]->[ ]->[1]
 ;  |____↑
@@ -42,10 +52,9 @@
 ; [1]->[2]
 ;  ↑    |
 ;  ―[3]<-
-
 (define t1 (cons 3 null))
 (define t2 (cons 2 t1))
 (define t3 (cons 1 t2))
 (set-cdr! t1 t3)
 (define loop t3)
-(count-pair loop) ; death loop
+(count-pair loop)
