@@ -1,0 +1,97 @@
+#lang scheme
+
+(require r5rs)
+
+(define (make-deque)
+  (let ((head-ptr '())
+        (tail-ptr '()))    
+    (define (print-deque-from-front)
+      (define (cur-val cur-ptr) (car cur-ptr))
+      (define (next-ptr cur-ptr) (cadr cur-ptr))
+      (define (iter ptr)
+        (if (null? ptr)
+            (display ")")
+            (begin
+              (display (cur-val ptr))
+              (display " ")
+              (iter (next-ptr ptr)))))
+      (display "(")
+      (iter head-ptr)
+      (newline))
+    (define (empty-deque?) 
+      (or (null? head-ptr)
+          (null? tail-ptr)))
+    (define (front-deque) 
+      (if (empty-deque?)
+          (error "FRONT called with an empty deque")
+          (car head-ptr)))
+    (define (rear-deque) 
+      (if (empty-deque?)
+          (error "REAR called with an empty deque")
+          (car tail-ptr)))
+    (define (front-insert-deque! item)
+      (let ((new-pair (cons item (cons null null))))
+        (cond ((empty-deque?)
+               (set! head-ptr new-pair)
+               (set! tail-ptr new-pair))
+              (else 
+               (set-car! (cdr new-pair) head-ptr)
+               (set-cdr! (cdr head-ptr) new-pair)
+               (set! head-ptr new-pair)))))
+    (define (rear-insert-deque! item)
+      (let ((new-pair (cons item '('()))))
+        (cond ((empty-deque?)
+               (set! head-ptr new-pair)
+               (set! tail-ptr new-pair))
+              (else 
+               (set-car! (cdr tail-ptr) new-pair)
+               (set-cdr! (cdr new-pair) tail-ptr)
+               (set! tail-ptr new-pair)))))
+    (define (front-delete-deque!)
+      (cond ((empty-deque?)
+             (error "FRONT-DELETE! called with an empty deque"))
+            (else 
+             (set! head-ptr (cadr head-ptr))
+             (set-cdr! (cdr head-ptr) (cons null null)))))
+    (define (rear-delete-deque!)
+      (cond ((empty-deque?)
+             (error "REAR-DELETE! called with an empty deque"))
+            (else 
+             (set! tail-ptr (cddr tail-ptr))
+             (set-car! (cdr tail-ptr) '()))))
+    
+    (define (dispatch m) 
+      (cond ((eq? m 'print-deque-from-front) print-deque-from-front)
+            ((eq? m 'empty-deque?) empty-deque?)	
+            ((eq? m 'front-deque) front-deque)
+            ((eq? m 'rear-deque) rear-deque)
+            ((eq? m 'front-insert-deque!) front-insert-deque!)
+            ((eq? m 'rear-insert-deque!) rear-insert-deque!)
+            ((eq? m 'front-delete-deque!) front-delete-deque!)
+            ((eq? m 'rear-delete-deque!) rear-delete-deque!)))
+    dispatch))
+(define (print-deque-from-front q) ((q 'print-deque-from-front)))
+(define (empty-deque? q) ((q 'empty-deque?)))
+(define (front-deque q) ((q 'front-deque)))
+(define (rear-deque q) ((q 'rear-deque)))
+(define (front-insert-deque! q item) ((q 'front-insert-deque!) item))
+(define (rear-insert-deque! q item) ((q 'rear-insert-deque!) item))
+(define (front-delete-deque! q) ((q 'front-delete-deque!)))
+(define (rear-delete-deque! q) ((q 'rear-delete-deque!)))
+
+
+; test
+(define q (make-deque))
+
+(empty-deque? q)
+(print-deque-from-front q)
+
+(front-insert-deque! q 'a)
+(print-deque-from-front q)
+
+(front-insert-deque! q 'b)
+
+(rear-delete-deque! q)
+
+(rear-delete-deque! q)
+
