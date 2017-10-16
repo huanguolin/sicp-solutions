@@ -2,35 +2,69 @@
 
 (require r5rs)
 
-(define (make-table)
+(define (make-table)    
+  (define (assoc key records)
+    (cond ((null? records) false)
+          ((equal? key (caar records)) (car records))
+          (else (assoc key (cdr records)))))
+  
   (let ((local-table (list '*table*)))
     (define (lookup key-list)
-      (cond ((null? key-list) false)
-            ((not (pair? key-list)) )
-          (let ((subtable
-                 (assoc () (cdr local-table))))
-            (if subtable
-                (let ((record
-                       (assoc key-2 (cdr subtable))))
-                  (if record (cdr record) false))
-                false))))
-    (define (insert! key-1 key-2 value)
-      (let ((subtable
-             (assoc key-1 (cdr local-table))))
-        (if subtable
-            (let ((record
-                   (assoc key-2 (cdr subtable))))
-              (if record
-                  (set-cdr! record value)
-                  (set-cdr! subtable
-                            (cons (cons key-2 value)
-                                  (cdr subtable)))))
-            (set-cdr! local-table
-                      (cons (list key-1 (cons key-2 value))
-                            (cdr local-table)))))
-      'ok)
+      (define (iter keys ptr)
+        (cond ((not ptr) false)
+              ((null? keys) (cdr ptr))
+              (else (iter (cdr keys)
+                          (assoc (car keys) ptr)))))
+      (let ((cdr-table (cdr local-table)))
+        (if (or (null? key-list)
+                (null? cdr-table))
+            false
+            (iter key-list cdr-table))))
+    (define (insert! key-list value)
+      (define (insert-keys! keys ptr)
+        (cond ((null? keys)
+               (set-cdr! ptr value))
+              ((null? ptr)
+               (set-cdr! local-table
+                         (cons (cons (car keys)
+                                     null)
+                               null))
+               (insert-keys! (cdr keys) (cadr local-table)))
+              (else
+               (set-cdr! ptr (cons (cons (car keys)
+                                         null)
+                                   (cdr ptr)))
+               (insert-keys! (cdr keys)
+                             (cadr ptr)))))
+      (define (iter keys ptr)
+        (cond ((null? keys)
+               (set-cdr! ptr value))
+              ((null? ptr)
+               (insert-keys! keys ptr))
+              (else
+               (let ((new-ptr (assoc (car keys) ptr)))
+                 (if new-ptr
+                     (iter (cdr keys) new-ptr)
+                     (insert-keys! keys ptr))))))
+      (if (null? key-list)
+          (error "INSERT-TABLE! Key list can't be null!")
+          (begin
+            (iter key-list (cdr local-table))
+            local-table)))
     (define (dispatch m)
       (cond ((eq? m 'lookup-proc) lookup)
             ((eq? m 'insert-proc!) insert!)
             (else (error "Unknown operation: TABLE" m))))
     dispatch))
+
+(define (lookup-table keys table)
+  ((table 'lookup-proc) keys))
+(define (insert-table! keys value table)
+  ((table 'insert-proc!) keys value))
+
+; test
+(define table (make-table))
+(define keys (list 1 2 3))
+(lookup-table keys table)
+(insert-table! keys 10 table)
+(lookup-table keys table)
