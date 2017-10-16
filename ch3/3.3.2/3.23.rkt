@@ -95,7 +95,9 @@
             ((eq? m 'front-insert-deque!) front-insert-deque!)
             ((eq? m 'rear-insert-deque!) rear-insert-deque!)
             ((eq? m 'front-delete-deque!) front-delete-deque!)
-            ((eq? m 'rear-delete-deque!) rear-delete-deque!)))
+            ((eq? m 'rear-delete-deque!) rear-delete-deque!)
+            (else 
+             (error "DISPATCH-DEQUE! Unknown function name!"))))
     dispatch))
 (define (print-deque-from-front q) ((q 'print-deque-from-front)))
 (define (print-deque-from-rear q) ((q 'print-deque-from-rear)))
