@@ -23,6 +23,7 @@
          stream-for-each
          stream-filter
          stream-enumerate-interval
+         integers-starting-from
          display-stream
          cond-display-stream)
 
@@ -71,6 +72,8 @@
       (stream-cons
        low
        (stream-enumerate-interval (+ low 1) high))))
+(define (integers-starting-from n)
+  (stream-cons n (integers-starting-from (+ n 1))))
 
 ; ==== util define ====
 (define (display-stream s)
