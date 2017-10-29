@@ -19,10 +19,12 @@
          stream-null?
          stream-ref
          stream-map
+         stream-high-map
          stream-for-each
          stream-filter
          stream-enumerate-interval
-         display-stream)
+         display-stream
+         cond-display-stream)
 
 
 ; ==== basic define ====
@@ -43,6 +45,13 @@
       the-empty-stream
       (stream-cons (proc (stream-car s))
                    (stream-map proc (stream-cdr s)))))
+(define (stream-high-map proc . argstreams)
+  (if (stream-null? (car argstreams))
+      the-empty-stream
+      (stream-cons
+       (apply proc (map stream-car argstreams))
+       (apply stream-high-map
+              (cons proc (map stream-cdr argstreams))))))
 (define (stream-for-each proc s)
   (if (stream-null? s)
       'done
@@ -66,5 +75,13 @@
 ; ==== util define ====
 (define (display-stream s)
   (stream-for-each display-line s))
+(define (cond-display-stream s cond)
+  (if (or (stream-null? s)
+          (not (cond (stream-car s))))
+      'done
+      (begin
+        (display-line (stream-car s))
+        (cond-display-stream (stream-cdr s)
+                             cond))))
 (define (display-line x) (newline) (display x))
 
