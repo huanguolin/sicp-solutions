@@ -15,3 +15,4 @@
   (stream-cons 1
                (mul-streams factorials
                             (integers-starting-from 2))))
+; 含有stream-high-map的递归无穷流不验证,不知为何会导致死循环
