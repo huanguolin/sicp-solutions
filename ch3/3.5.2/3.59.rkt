@@ -3,19 +3,17 @@
 (require (file "../3.5.1/stream.rkt"))
 
 ; a)
+; 方法1
 (define (integrate-series args)
   (define (iter s cnt)
     (stream-cons (* (/ 1 cnt)
                     (stream-car s))
                  (iter (stream-cdr s) (+ cnt 1))))
   (iter args 1))
-(define integers (integers-starting-from 1))
+; 方法2
 (define (integrate-series2 s)
-              (stream-high-map *
-                          (stream-high-map /
-                                             ones
-                                             integers)
-                          s))
+  (stream-high-map / s integers))
+(define integers (integers-starting-from 1))
 ; test
 (define ones (stream-cons 1 ones))
 (define s1 (integrate-series ones))
