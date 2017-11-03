@@ -91,3 +91,7 @@
 
 ; ======= 如果 delay 不用 memo-proc 优化=======
 ; 如果memo-proc不用优化，两者的效率是一样的。
+; 因为sqrt-stream中要从guesses取值时，没有存，就只能计算。效果和
+; louis-sqrt-stream相同。
+
+
