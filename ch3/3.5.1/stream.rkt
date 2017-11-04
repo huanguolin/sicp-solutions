@@ -30,7 +30,8 @@
          add-streams
          mul-streams
          partial-sums
-         merge)
+         merge
+         interleave)
 
 
 ; ==== basic define ====
@@ -113,7 +114,7 @@
 (define integers (integers-starting-from 1))
 
 ; ==== stream operator ====
-; add/mul/partial-sums/merge
+; add/mul/partial-sums/merge/interleave
 (define (add-streams s1 s2)
   (cons-stream
    (+ (stream-car s1) (stream-car s2))
@@ -143,3 +144,8 @@
                    s1car
                    (merge (stream-cdr s1)
                           (stream-cdr s2)))))))))
+(define (interleave s1 s2)
+  (if (stream-null? s1)
+      s2
+      (cons-stream (stream-car s1)
+                   (interleave s2 (stream-cdr s1)))))
