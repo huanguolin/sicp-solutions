@@ -76,7 +76,7 @@
                        (stream-cdr stream))))
         (else (stream-filter pred (stream-cdr stream)))))
 (define (scale-stream s factor)
-  (stream-map (lambda (x) (* s factor)) s))
+  (stream-map (lambda (x) (* x factor)) s))
 
 ; ==== basic stream generation ==== 
 (define (stream-enumerate-interval low high)
