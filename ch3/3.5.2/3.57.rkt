@@ -3,12 +3,13 @@
 (require (file "../3.5.1/stream.rkt"))
 
 ; pre-defined
-(define (add-streams s1 s2) (stream-high-map + s1 s2))
 (define fibs
-  (stream-cons 0
-               (stream-cons 1
+  (cons-stream 0
+               (cons-stream 1
                             (add-streams (stream-cdr fibs)
                                          fibs))))
+; test
+(display-stream-top fibs 10)
 
 ; 1)
 ; 使用 add-streams 时，计算第n个斐波那契数需要

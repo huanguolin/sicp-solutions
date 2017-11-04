@@ -10,15 +10,15 @@
          (let ((s1car (stream-car s1))
                (s2car (stream-car s2)))
            (cond ((< s1car s2car)
-                  (stream-cons
+                  (cons-stream
                    s1car
                    (merge (stream-cdr s1) s2)))
                  ((> s1car s2car)
-                  (stream-cons
+                  (cons-stream
                    s2car
                    (merge s1 (stream-cdr s2))))
                  (else
-                  (stream-cons
+                  (cons-stream
                    s1car
                    (merge (stream-cdr s1)
                           (stream-cdr s2)))))))))
@@ -28,12 +28,9 @@
 
 ; require
 (define S
-  (stream-cons 1 (merge (merge (scale-stream S 2)
+  (cons-stream 1 (merge (merge (scale-stream S 2)
                                (scale-stream S 3))
                         (scale-stream S 5))))
 
 ; test
-; 这个没有用到stream-high-map， 但是用到了stream-map.
-; 不知为何也导致死循环？？！
-; 难道罪魁祸首是 stream-map ?
-;(cond-display-stream S (lambda (x) (< x 100)))
+(cond-display-stream S (lambda (x) (< x 50)))

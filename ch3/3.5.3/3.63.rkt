@@ -6,17 +6,19 @@
 ; pre-define
 (define (average a b) (/ (+ a b) 2))
 (define (sqrt-improve guess x)
-  (average guess x))
+  (average guess (/ x guess)))
 
 ; ======= 书中的定义 ========
 (define (sqrt-stream x)
   (define guesses
-    (stream-cons
+    (cons-stream
      1.0
      (stream-map
       (lambda (guess) (sqrt-improve guess x))
       guesses)))  
   guesses)
+; test
+(display-stream-top (sqrt-stream 2) 10)
 ; 假定 (define s (sqrt-steram 2))
 ; 依据 stream-ref 的定义，它是挨个向后查找。
 ; 那么:
@@ -49,7 +51,7 @@
 
 ; ======= 题目中 Louis 的定义 =======
 (define (louis-sqrt-stream x)
-  (stream-cons
+  (cons-stream
    1.0
    (stream-map
     (lambda (guess) (sqrt-improve guess x))

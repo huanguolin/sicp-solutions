@@ -2,27 +2,23 @@
 
 (require (file "../3.5.1/stream.rkt"))
 
+; 参考：https://github.com/jiacai2050/sicp/blob/master/exercises/03/3.59.scm
+
 ; a)
-; 方法1
-(define (integrate-series args)
-  (define (iter s cnt)
-    (stream-cons (* (/ 1 cnt)
-                    (stream-car s))
-                 (iter (stream-cdr s) (+ cnt 1))))
-  (iter args 1))
-; 方法2
-(define (integrate-series2 s)
-  (stream-high-map / s integers))
-(define integers (integers-starting-from 1))
+(define (integrate-series s)
+  (div-streams s integers))
+(define (div-streams s1 s2)
+  (stream-map / s1 s2))
 ; test
-(define ones (stream-cons 1 ones))
-(define s1 (integrate-series ones))
-(cond-display-stream s1 (lambda (x) (> x (/ 1 10))))
-(define s2 (integrate-series2 ones))
-(cond-display-stream s2 (lambda (x) (> x (/ 1 10))))
+(display-stream-top (integrate-series ones) 10)
 
 ; b)
-(define (scale-stream s factor)
-  (stream-map (lambda (x) (* s factor)) s))
-(define sine-series (stream-cons 0 (integrate-series cosine-series)))
-(define cosine-series (stream-cons 1 (integrate-series (scale-stream sine-series -1))))
+(define sine-series (cons-stream 0
+                                 (integrate-series cosine-series)))
+(define cosine-series (cons-stream 1
+                                   (integrate-series
+                                    (scale-stream sine-series -1))))
+; test
+; 难道没有用 MIT-Scheme 导致运行出错！
+(display-stream-top sine-series 10)
+(display-stream-top cosine-series 10)

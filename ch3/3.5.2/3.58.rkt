@@ -4,7 +4,7 @@
 
 ; pre-defined
 (define (expand num den radix)
-  (stream-cons
+  (cons-stream
    (quotient (* num radix) den)
    (expand (remainder (* num radix) den) den radix)))
 
@@ -14,18 +14,5 @@
 (define s2 (expand 3 8 10))
 
 ; test
-(define cnt 0)
-(define times 15)
-(define (print-n-times x)
-  (if (< cnt times)
-      (begin
-        (set! cnt (+ cnt 1))
-        #t)
-      #f))
-
-; print s1
-(cond-display-stream s1 print-n-times)
-
-; print s2
-(set! cnt 0)
-(cond-display-stream s2 print-n-times)
+(display-stream-top s1 15)
+(display-stream-top s2 15)
