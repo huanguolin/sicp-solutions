@@ -13,6 +13,8 @@
 (define ps (weighted-pairs integers
                            integers
                            (lambda (lst) (apply cube-sum lst))))
+
+; 这里是第一次写出来的方法，后面有更优雅的方法
 (define (Ramanujan)
   (define (iter s)
     (let ((v (stream-car s))
@@ -32,3 +34,22 @@
 ;(20683 (10 27) (19 24))
 ;(32832 (4 32) (18 30))
 ;(39312 (2 34) (15 33))
+
+;================= 更优雅 ===================
+; 受到3.74的启发，应该在流这个抽象之上思考,
+; 得到下面更加简洁的方法:
+(define (ramanujan-proc v1 v2)
+  (let ((cs1 (apply cube-sum v1))
+        (cs2 (apply cube-sum v2)))
+    (if (= cs1 cs2)
+        (list cs1 v1 v2)
+        '())))
+(define ramanujan-nums
+  (stream-filter (lambda (x) (not (null? x)))
+                 (stream-map ramanujan-proc
+                             ps
+                             (stream-cdr ps))))
+
+(display-stream-top ramanujan-nums 6)
+; 这种方法思路清晰，而且对ramanujan-proc进行简单的修改
+; 就可得到仅仅是Ramanujan数值,省略分解形式的结果。
