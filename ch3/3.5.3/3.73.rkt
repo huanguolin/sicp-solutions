@@ -2,16 +2,18 @@
 
 (require (file "../3.5.1/stream.rkt"))
 
+; pre-define
+(define (integral integrand initial-value dt)
+  (define int
+    (cons-stream initial-value
+                 (add-streams (scale-stream integrand dt)
+                              int)))
+  int)
+
 (define (RC-circuit r c dt)
-  (define (rcc i v0)
-    (define rcs
-      (cons-stream v0
-                   (stream-map +
-                               (scale-stream i (/ dt c))
-                               (scale-stream i r)
-                               rcs)))
-    rcs)
-  rcc)
+  (lambda (i v0)
+    (add-streams (integral i v0 (/ dt c))
+                 (scale-stream i r))))
 ; test
 (define RC1 (RC-circuit 5 1 0.5))
 (define RC1-vs (RC1 integers 1))
