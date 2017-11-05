@@ -116,15 +116,11 @@
 ; ==== stream operator ====
 ; add/mul/partial-sums/merge/interleave
 (define (add-streams s1 s2)
-  (cons-stream
-   (+ (stream-car s1) (stream-car s2))
-   (stream-map + (stream-cdr s1) (stream-cdr s2))))
+  (stream-map + s1 s2))
 (define (mul-streams s1 s2)
   (stream-map * s1 s2))
 (define (partial-sums s)
-  (cons-stream (stream-car s)
-               (add-streams partial-sums
-                            (stream-cdr s))))
+  (add-streams s (cons-stream 0 (partial-sums s))))
 (define (merge s1 s2)
   (cond ((stream-null? s1) s2)
         ((stream-null? s2) s1)

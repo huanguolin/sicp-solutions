@@ -7,5 +7,5 @@
                (stream-map - (ln2-summands (+ n 1)))))
 (define ln2-stream
   (partial-sums (ln2-summands 1)))
-
-
+; test 
+(display-stream-top ln2-stream 10)
