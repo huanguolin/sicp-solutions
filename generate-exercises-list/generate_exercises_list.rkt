@@ -1,7 +1,7 @@
 #lang racket
 
 ; configure
-(define output-file "./exercise-list.md")
+(define output-file "./exercise_list.md")
 (define exercises-root-path "../exercises")
 (define fix-path "./exercises")
 
