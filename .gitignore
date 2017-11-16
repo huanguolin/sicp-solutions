@@ -1,2 +1,3 @@
 *.bak
 **/compiled/
+generate-exercises-list/*.md

@@ -1,44 +1,61 @@
 #lang racket
 
+; configure
+(define output-file "./exercise-list.md")
+(define exercises-root-path "../exercises")
+(define fix-path "./exercises")
+
+; dependency
 (require "./sicp-content/sicp_content.rkt")
+(require "./generate_exercises_string.rkt")
 (require "./util.rkt")
 
+; functions
 (define (proc-content element pre-sn index)
-  (define (print sn title)
-    (let ((sn-str (string-join sn ".")))
-      (display (make-string (+ 1 (length sn)) #\#))
-      (display " ")
-      (display sn-str)
-      (display " ")
-      (display title)
-      (newline)))
-  (let ((sn (append pre-sn (list (number->string index)))))
+  (let ([sn (append pre-sn (list index))])
     (cond ((pair? element)
-           (print sn (car element))
-           (map (lambda (x y)
-                  (proc-content x sn y))
-                (cdr element)
-                (enumerate-integers 1 (length (cdr element)))))
+           (let ([title (car element)]
+                 [content (cdr element)])
+             (print-title sn title)
+             (for-each (lambda (x y) (proc-content x sn y))
+                       content
+                       (enumerate-integers 1 (length content)))))
           (else
-           (print sn element)))))
-; test
-(proc-content (cadr sicp-content) '() 2)
+           (print-title sn element)
+           (print-exercises sn)))))
 
-(define (list-exercises path)
-  (define (path-proc x)
-    (string-join
-     (drop-right
-      (string-split
-       (path->string x) ".") 1) "."))
-  (map path-proc
-       (directory-list path)))
-; test
-;(list-exercises (string->path "../exercises/ch1/1.3.1"))
+(define (print-title sn title)
+  (let ((sn-str (string-join (map number->string sn) ".")))
+    (append-line-to-file
+     (string-join
+      (list (make-string (+ 1 (length sn)) #\#)
+            sn-str
+            title)
+      " ")
+     output-file)))
 
-(define (list-dirs path)
-  (filter directory-exists?
-          (directory-list path
-                          #:build? #t)))
-; test
-;(list-dirs (string->path "../exercises/ch1/"))
+(define (print-exercises sn)
+  (define sn-strs (map number->string sn))
+  (define path (string-append exercises-root-path
+                              "/"
+                              "ch"
+                              (car sn-strs)
+                              "/"
+                              (string-join sn-strs ".")
+                              "/"))
+  (append-line-to-file (generate-exercises-string path
+                                                  fix-path)
+                       output-file))
+
+; ====== main function ======
+(define (main)
+  (display-to-file "# SICP Solutions\n\n"
+                   output-file
+                   #:mode 'text
+                   #:exists 'replace)
+  (for-each (lambda (x y) (proc-content x '() y))
+            sicp-content
+            (enumerate-integers 1 (length sicp-content))))
+; run main function
+(main)
 
