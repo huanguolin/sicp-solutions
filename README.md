@@ -1,7 +1,6 @@
 # sicp-solutions 
 
-> My solutions for SICP exercise.
-
+> My solutions for SICP exercises. [Click here](./exercises_list.md) to see the exercises list.
 
 # License
 
