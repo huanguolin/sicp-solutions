@@ -3,7 +3,6 @@
 ; configure
 (define output-file "./exercises_list.md")
 (define exercises-root-path "../exercises")
-(define fix-path "./exercises")
 
 ; dependency
 (require "./sicp-content/sicp_content.rkt")
@@ -36,16 +35,17 @@
 
 (define (print-exercises sn)
   (define sn-strs (map number->string sn))
-  (define path (string-append exercises-root-path
-                              "/"
-                              "ch"
-                              (car sn-strs)
-                              "/"
-                              (string-join sn-strs ".")
-                              "/"))
-  (append-line-to-file (generate-exercises-string path
-                                                  fix-path)
-                       output-file))
+  (define path
+    (string-append exercises-root-path
+                   "/"
+                   "ch"
+                   (car sn-strs)
+                   "/"
+                   (string-join sn-strs ".")))
+  (append-line-to-file
+   (generate-exercises-string path
+                              (substring path 1))
+   output-file))
 
 ; ====== main function ======
 (define (main)
