@@ -27,8 +27,8 @@
 
 ### 1.2 Procedures and the Processes They Generate
 #### 1.2.1 Linear Recursion and Iteration
-[(1.10)](./exercises/ch1/1.2.1/1.10.rkt)
 [(1.9)](./exercises/ch1/1.2.1/1.9.rkt)
+[(1.10)](./exercises/ch1/1.2.1/1.10.rkt)
 
 #### 1.2.2 Tree Recursion
 [(1.11)](./exercises/ch1/1.2.2/1.11.rkt)
@@ -96,12 +96,12 @@
 [(2.6)](./exercises/ch2/2.1.3/2.6.rkt)
 
 #### 2.1.4 Extended Exercise: Interval Arithmetic
-[(2.10)](./exercises/ch2/2.1.4/2.10.rkt)
-[(2.12)](./exercises/ch2/2.1.4/2.12.rkt)
-[(2.13)](./exercises/ch2/2.1.4/2.13.rkt)
 [(2.7)](./exercises/ch2/2.1.4/2.7.rkt)
 [(2.8)](./exercises/ch2/2.1.4/2.8.rkt)
 [(2.9)](./exercises/ch2/2.1.4/2.9.rkt)
+[(2.10)](./exercises/ch2/2.1.4/2.10.rkt)
+[(2.12)](./exercises/ch2/2.1.4/2.12.rkt)
+[(2.13)](./exercises/ch2/2.1.4/2.13.rkt)
 
 ### 2.2 Hierarchical Data and the Closure Property
 #### 2.2.1 Representing Sequences
