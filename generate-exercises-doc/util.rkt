@@ -1,6 +1,7 @@
 #lang racket
 
 (provide enumerate-integers
+         accumulate
          append-lines-to-file
          append-line-to-file
          list-files-name)
@@ -11,6 +12,12 @@
       (cons low
             (enumerate-integers (+ low 1)
                                 high))))
+
+(define (accumulate op initial sequence)
+  (if (null? sequence)
+      initial
+      (op (car sequence)
+          (accumulate op initial (cdr sequence)))))
 
 (define (append-lines-to-file line-list file-path)
   (display-lines-to-file line-list
@@ -31,12 +38,12 @@
       (string-append dir-path
                      "/"
                      (path->string path)))))
-(let ([path (string->path dir-path)])
-  (if (directory-exists? path)
-      (map path->string
-           (filter my-file-exists?
-                   (directory-list
-                    (string->path dir-path))))
-      '())))
+  (let ([path (string->path dir-path)])
+    (if (directory-exists? path)
+        (map path->string
+             (filter my-file-exists?
+                     (directory-list
+                      (string->path dir-path))))
+        '())))
 ; test
 ; (list-files-name "../")

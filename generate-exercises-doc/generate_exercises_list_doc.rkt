@@ -42,9 +42,12 @@
                    (car sn-strs)
                    "/"
                    (string-join sn-strs ".")))
+  (define exercises-string
+    (generate-exercises-string path
+                               (substring path 1)))
   (append-line-to-file
-   (generate-exercises-string path
-                              (substring path 1))
+   (string-append exercises-string
+                  "\n")
    output-file))
 
 ; ====== main function ======

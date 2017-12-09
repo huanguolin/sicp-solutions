@@ -1,8 +1,8 @@
 #lang racket
 
-(require "./util.rkt")
-
 (provide generate-exercises-string)
+
+(require "./util.rkt")
 
 ; functions
 (define (generate-exercises-string dir-path fix-path)
@@ -15,7 +15,7 @@
                      fix-path
                      "/"
                      file-path
-                     ")\n")))
+                     ")")))
   (let ([files-name (filter exercise-file-name?
                             (list-files-name dir-path))])
     (string-join
