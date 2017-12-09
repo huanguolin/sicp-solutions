@@ -1,7 +1,7 @@
 #lang racket
 
 ; configure
-(define output-file "./READEME.md")
+(define output-file "./README.md")
 (define file-header
   '("# sicp-solutions" 
     "> My solutions for SICP exercises."))
